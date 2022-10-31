@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import postRecordsCursor from "./records-cursor";
+import { postRecordsCursorResp } from "./types/data";
 
 const Popup = () => {
   const [count, setCount] = useState(0);
@@ -36,24 +38,26 @@ const Popup = () => {
   };
 
   const timerStart = () => {
-    chrome.runtime.sendMessage({ time: new Date() }, function(res) {
-      setStartTime(res.time)
+    const time = new Date()
+    chrome.runtime.sendMessage({ time: time }, function(res) {
+      setStartTime(time.toLocaleTimeString())
     })
   }
 
   const timerStop = () => {
     chrome.storage.local.get(["time"], function(value) {
-      alert(value.time)
       const startTime = new Date(value.time)
       const diff = startTime.getTime() - new Date().getTime()
       const diffMin = Math.abs(diff) / (60 * 1000)
 
-      alert(startTime)
-      alert(diff)
-      alert(diffMin)
-
       setDiffMinute(Math.floor(diffMin))
+      updateTime()
     })
+  }
+
+  const updateTime = async () => {
+    const cursorId = await postRecordsCursor(70970) as unknown as postRecordsCursorResp
+    alert(cursorId.id)
   }
 
   return (
