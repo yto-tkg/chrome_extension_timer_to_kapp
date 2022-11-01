@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import postRecordsCursor from "./records-cursor";
-import { postRecordsCursorResp } from "./types/data";
+import { postRecordsCursor, getRecordsCursor } from "./records-cursor";
+import { GetRecordsCursorResp, PostRecordsCursorResp } from "./types/data";
 
 const Popup = () => {
   const [count, setCount] = useState(0);
@@ -56,8 +56,18 @@ const Popup = () => {
   }
 
   const updateTime = async () => {
-    const cursorId = await postRecordsCursor(70970) as unknown as postRecordsCursorResp
-    alert(cursorId.id)
+    const response = await postRecordsCursor(70998).then((res: PostRecordsCursorResp) => {
+      return res
+    }).then(async (res: PostRecordsCursorResp) => {
+      return await getRecordsCursor(res.id)
+    }).then((res: GetRecordsCursorResp) => {
+      //alert(`recordId: ${res.recordId}`)
+      //alert(`fieldId: ${res.fieldId}`)
+      alert(`minute: ${res.minute}`)
+      alert(`date: ${res.date}`)
+      alert(`fieldIds: ${res.fieldIds}`)
+      return res
+    })
   }
 
   return (
