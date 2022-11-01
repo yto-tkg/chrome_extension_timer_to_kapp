@@ -5,7 +5,7 @@ import { fetcher } from './utils'
  * POST https://bozuman.cybozu.com/k/v1/records/cursor.json
  *
  * @param app
- * @returns cursorId
+ * @returns Promise<PostRecordsCursorResp>
  */
 const postRecordsCursor = async (
   app: number
@@ -28,8 +28,8 @@ const postRecordsCursor = async (
 /** 
  * GET https://bozuman.cybozu.com/k/v1/records/cursor.json
  *
- * @param app
- * @returns cursorId
+ * @param cursorId
+ * @returns Promise<GetRecordsCursorResp>
  */
 const getRecordsCursor = async (
   cursorId: string
@@ -47,9 +47,9 @@ const getRecordsCursor = async (
 
     const targetRecord = res.records[0]
 
-    let fieldIds = []
+    let fields = []
     for (let i = 0; i < targetRecord['テーブル']['value'].length - 1; i++) {
-      fieldIds.push(targetRecord['テーブル']['value'][i]['id'])
+      fields.push(targetRecord['テーブル']['value'][i])
     }
 
     const response = {
@@ -57,7 +57,7 @@ const getRecordsCursor = async (
       fieldId: targetRecord['テーブル']['value'][targetRecord['テーブル']['value'].length - 1]['id'],
       minute: targetRecord['テーブル']['value'][targetRecord['テーブル']['value'].length - 1]['value']['高木さん']['value'],
       date: targetRecord['テーブル']['value'][targetRecord['テーブル']['value'].length - 1]['value']['日付']['value'],
-      fieldIds: fieldIds, 
+      otherFields: fields, 
     }
       return response
   })

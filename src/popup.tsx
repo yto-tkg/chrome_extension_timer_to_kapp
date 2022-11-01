@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
+import putRecord, { PutRecordParams } from "./record";
 import { postRecordsCursor, getRecordsCursor } from "./records-cursor";
 import { GetRecordsCursorResp, PostRecordsCursorResp } from "./types/data";
 
@@ -51,23 +52,37 @@ const Popup = () => {
       const diffMin = Math.abs(diff) / (60 * 1000)
 
       setDiffMinute(Math.floor(diffMin))
-      updateTime()
     })
   }
 
   const updateTime = async () => {
-    const response = await postRecordsCursor(70998).then((res: PostRecordsCursorResp) => {
+    const appId = 70998
+    const response = await postRecordsCursor(appId).then((res: PostRecordsCursorResp) => {
       return res
     }).then(async (res: PostRecordsCursorResp) => {
       return await getRecordsCursor(res.id)
     }).then((res: GetRecordsCursorResp) => {
       //alert(`recordId: ${res.recordId}`)
       //alert(`fieldId: ${res.fieldId}`)
-      alert(`minute: ${res.minute}`)
-      alert(`date: ${res.date}`)
-      alert(`fieldIds: ${res.fieldIds}`)
-      return res
-    })
+      //alert(`minute: ${res.minute}`)
+      //alert(`date: ${res.date}`)
+      //alert(`fieldIds: ${res.fieldIds}`)
+      //alert(typeof JSON.stringify(res.otherFields))
+      //alert(`otherFields: ${JSON.stringify(res.otherFields)['otherFields' as keyof string]}`)
+      const data = {
+          app: appId,
+          recordId: res.recordId,
+          fieldId: res.fieldId,
+          fieldName: "高木さん",
+          minute: Number(res.minute) + Number(diffMinute),
+          otherFields: JSON.stringify(res.otherFields),
+      }
+      return data
+    }).then(async (data: PutRecordParams) => {
+        return await putRecord(data).then((res: any) => {
+          return res
+        }) 
+      })
   }
 
   return (
@@ -87,6 +102,7 @@ const Popup = () => {
       <button onClick={changeBackground}>change background</button>
       <button onClick={timerStart}>start</button>
       <button onClick={timerStop}>stop</button>
+      <button onClick={updateTime}>save</button>
     </>
   );
 };

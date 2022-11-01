@@ -8,5 +8,5 @@ export type GetRecordsCursorResp = {
   fieldId: number
   minute: number
   date: string
-  fieldIds: number[]
+  otherFields: Object
 }
