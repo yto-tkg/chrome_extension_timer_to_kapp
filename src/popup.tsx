@@ -5,11 +5,13 @@ import { postRecordsCursor, getRecordsCursor } from "./records-cursor";
 import { GetRecordsCursorResp, PostRecordsCursorResp } from "./types/data";
 
 const Popup = () => {
-  const [count, setCount] = useState(0);
-  const [currentURL, setCurrentURL] = useState<string>();
+  const [count, setCount] = useState(0)
+  const [currentURL, setCurrentURL] = useState<string>()
 
   const [startTime, setStartTime] = useState<string>()
   const [diffMinute, setDiffMinute] = useState(0)
+
+  const [realTime, setRealTime] = useState(new Date().toLocaleTimeString())
 
   useEffect(() => {
     chrome.action.setBadgeText({ text: count.toString() });
@@ -20,6 +22,10 @@ const Popup = () => {
       setCurrentURL(tabs[0].url);
     });
   }, []);
+
+  setInterval(() => {
+    setRealTime(new Date().toLocaleTimeString())
+  }, 1000)
 
   const changeBackground = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -52,8 +58,10 @@ const Popup = () => {
       const diffMin = Math.abs(diff) / (60 * 1000)
 
       setDiffMinute(Math.floor(diffMin))
+      updateTime()
     })
   }
+
 
   const updateTime = async () => {
     const appId = 70998
@@ -75,7 +83,7 @@ const Popup = () => {
           fieldId: res.fieldId,
           fieldName: "高木さん",
           minute: Number(res.minute) + Number(diffMinute),
-          otherFields: JSON.stringify(res.otherFields),
+          otherFields: res.otherFields,
       }
       return data
     }).then(async (data: PutRecordParams) => {
@@ -89,7 +97,7 @@ const Popup = () => {
     <>
       <ul style={{ minWidth: "700px" }}>
         <li>Current URL: {currentURL}</li>
-        <li>Current Time: {new Date().toLocaleTimeString()}</li>
+        <li>Current Time: {realTime}</li>
         <li>Start Time: {startTime}</li>
         <li>Diff Minute: {diffMinute}</li>
       </ul>
@@ -99,10 +107,9 @@ const Popup = () => {
       >
         count up
       </button>
-      <button onClick={changeBackground}>change background</button>
-      <button onClick={timerStart}>start</button>
-      <button onClick={timerStop}>stop</button>
-      <button onClick={updateTime}>save</button>
+      <button onClick={changeBackground} style={{background: '#1ed760', color: 'black'}}>change background</button>
+      <button onClick={timerStart} style={{background: '#1ed760', color: 'black'}}>start</button>
+      <button onClick={timerStop} style={{background: '#1ed760', color: 'black'}}>stop</button>
     </>
   );
 };
