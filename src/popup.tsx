@@ -5,11 +5,13 @@ import { postRecordsCursor, getRecordsCursor } from "./records-cursor";
 import { GetRecordsCursorResp, PostRecordsCursorResp } from "./types/data";
 
 const Popup = () => {
-  const [count, setCount] = useState(0);
-  const [currentURL, setCurrentURL] = useState<string>();
+  const [count, setCount] = useState(0)
+  const [currentURL, setCurrentURL] = useState<string>()
 
   const [startTime, setStartTime] = useState<string>()
   const [diffMinute, setDiffMinute] = useState(0)
+
+  const [realTime, setRealTime] = useState(new Date().toLocaleTimeString())
 
   useEffect(() => {
     chrome.action.setBadgeText({ text: count.toString() });
@@ -20,6 +22,10 @@ const Popup = () => {
       setCurrentURL(tabs[0].url);
     });
   }, []);
+
+  setInterval(() => {
+    setRealTime(new Date().toLocaleTimeString())
+  }, 1000)
 
   const changeBackground = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -55,6 +61,7 @@ const Popup = () => {
     })
   }
 
+
   const updateTime = async () => {
     const appId = 70998
     const response = await postRecordsCursor(appId).then((res: PostRecordsCursorResp) => {
@@ -75,7 +82,7 @@ const Popup = () => {
           fieldId: res.fieldId,
           fieldName: "高木さん",
           minute: Number(res.minute) + Number(diffMinute),
-          otherFields: JSON.stringify(res.otherFields),
+          otherFields: res.otherFields,
       }
       return data
     }).then(async (data: PutRecordParams) => {
@@ -89,7 +96,7 @@ const Popup = () => {
     <>
       <ul style={{ minWidth: "700px" }}>
         <li>Current URL: {currentURL}</li>
-        <li>Current Time: {new Date().toLocaleTimeString()}</li>
+        <li>Current Time: {realTime}</li>
         <li>Start Time: {startTime}</li>
         <li>Diff Minute: {diffMinute}</li>
       </ul>

@@ -6,7 +6,7 @@ export type PutRecordParams = {
   fieldId: number
   fieldName: string
   minute: number
-  otherFields: Object
+  otherFields: any[]
 }
 
 
@@ -20,8 +20,13 @@ const putRecord = async (
   putData: PutRecordParams
 ): Promise<Object> => {
 
-  let obj = JSON.stringify(putData.otherFields) as Object
-  alert(JSON.parse(JSON.stringify({...obj})))
+  //let obj = JSON.stringify(putData.otherFields) as Object
+  //alert(obj)
+  let test
+  putData.otherFields.forEach((obj: any) => {
+    alert(`obj: ${JSON.stringify(obj)}`)
+  })
+
   return await fetcher('https://bozuman.cybozu.com/k/v1/record.json', {
     method: 'PUT',
     headers: {
@@ -36,8 +41,8 @@ const putRecord = async (
       record: {
         "テーブル": {
           value: [
-            JSON.parse(JSON.stringify({...obj})),
-            {
+            putData.otherFields
+            ,{
               id: putData.fieldId,
               value: {
                 "高木さん": {

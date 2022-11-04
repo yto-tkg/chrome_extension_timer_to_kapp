@@ -52,15 +52,19 @@ const getRecordsCursor = async (
       fields.push(targetRecord['テーブル']['value'][i])
     }
 
+    //const test = { ...fields }
+    //alert(`1: ${fields}`)
+    //alert(`2: ${test}`)
+
     const response = {
       recordId: targetRecord['レコード番号']['value'],
       fieldId: targetRecord['テーブル']['value'][targetRecord['テーブル']['value'].length - 1]['id'],
       minute: targetRecord['テーブル']['value'][targetRecord['テーブル']['value'].length - 1]['value']['高木さん']['value'],
       date: targetRecord['テーブル']['value'][targetRecord['テーブル']['value'].length - 1]['value']['日付']['value'],
-      otherFields: fields, 
+      otherFields: fields,
     }
-      return response
+    return response
   })
 }
 
-export {postRecordsCursor, getRecordsCursor}
+export { postRecordsCursor, getRecordsCursor }
