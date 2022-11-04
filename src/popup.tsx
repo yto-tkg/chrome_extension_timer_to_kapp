@@ -58,6 +58,7 @@ const Popup = () => {
       const diffMin = Math.abs(diff) / (60 * 1000)
 
       setDiffMinute(Math.floor(diffMin))
+      updateTime()
     })
   }
 
@@ -106,10 +107,9 @@ const Popup = () => {
       >
         count up
       </button>
-      <button onClick={changeBackground}>change background</button>
-      <button onClick={timerStart}>start</button>
-      <button onClick={timerStop}>stop</button>
-      <button onClick={updateTime}>save</button>
+      <button onClick={changeBackground} style={{background: '#1ed760', color: 'black'}}>change background</button>
+      <button onClick={timerStart} style={{background: '#1ed760', color: 'black'}}>start</button>
+      <button onClick={timerStop} style={{background: '#1ed760', color: 'black'}}>stop</button>
     </>
   );
 };
