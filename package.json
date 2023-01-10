@@ -1,7 +1,7 @@
 {
-  "name": "chrome-extension-sample",
+  "name": "chrome_extension_timer_to_kapp",
   "version": "1.0.0",
-  "description": "chrome-extension-sample",
+  "description": "chrome_extension_timer_to_kappe",
   "main": "index.js",
   "scripts": {
     "watch": "webpack --config webpack/webpack.dev.js --watch",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tokku5552/chrome-extension-sample.git"
+    "url": "https://github.com/yto-tkg/chrome_extension_timer_to_kapp.git"
   },
   "dependencies": {
     "react": "^17.0.1",

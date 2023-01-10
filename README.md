@@ -1,6 +1,6 @@
-# Chrome Extension Sample
+# Chrome Extension Timer To KApp
 
-Chrome Extension Sample
+Chrome Extension Timer To KApp
 
 ## Prerequisites
 
